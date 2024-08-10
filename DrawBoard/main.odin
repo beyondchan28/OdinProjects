@@ -61,7 +61,7 @@ main :: proc() {
 		}
 		else if rl.IsKeyPressed(.SPACE) {
 			if len(draw_tint) != 0 {
-				//delete(draw_tint[len(draw_tint) - 1])
+				delete(draw_tint[len(draw_tint) - 1])
 				pop_safe(&draw_tint)
 			}
 		}
