@@ -62,7 +62,7 @@ main :: proc() {
 		else if rl.IsKeyPressed(.SPACE) {
 			if len(draw_tint) != 0 {
 				delete(draw_tint[len(draw_tint) - 1])
-				pop_safe(&draw_tint)
+				pop(&draw_tint)
 			}
 		}
 		for tint in tint_to_add {
