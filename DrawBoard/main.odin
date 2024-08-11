@@ -77,7 +77,11 @@ main :: proc() {
 		}
 		rl.EndDrawing()
 	}
-	delete(draw_tint)
+	
+	for &tint_arr in draw_tint {
+		delete(tint_arr)
+	}
+	delete_dynamic_array(draw_tint)
 	delete(tint_to_add)
 	rl.CloseWindow()
 }
