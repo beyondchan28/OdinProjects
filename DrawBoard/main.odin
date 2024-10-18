@@ -5,21 +5,21 @@ import "core:fmt"
 import "core:c"
 import "core:mem"
 
-WINDOW_WIDTH :: 800
-WINDOW_HEIGHT :: 600
+window_width :: 800
+window_height :: 600
 
-Tint :: struct {
+tint :: struct {
 	pos: rl.Vector2,
 	size: rl.Vector2,
 	col: rl.Color,
 }
 
-draw_tint : [dynamic][dynamic]Tint
-tint_to_add : [dynamic]Tint
+draw_tint : [dynamic][dynamic]tint
+tint_to_add : [dynamic]tint
 
 main :: proc() {
 	when ODIN_DEBUG {
-		track: mem.Tracking_Allocator
+		track: mem.tracking_allocator
 		mem.tracking_allocator_init(&track, context.allocator)
 		context.allocator = mem.tracking_allocator(&track)
 
@@ -48,20 +48,18 @@ main :: proc() {
 		rl.ClearBackground(rl.WHITE)
 		if rl.IsMouseButtonDown(.LEFT) {
 			mouse_pos := rl.GetMousePosition()
-			paint := Tint{mouse_pos - 8, rl.Vector2{16, 16}, rl.BLACK}
+			paint := tint{mouse_pos - 8, rl.Vector2{16, 16}, rl.BLACK}
 			append(&tint_to_add, paint) 
 		}
 		else if rl.IsMouseButtonReleased(.LEFT) {
-			new_tint := make([dynamic]Tint, len(tint_to_add), cap(tint_to_add))
-			//defer delete(new_tint)
+			new_tint := make([dynamic]tint, len(tint_to_add), cap(tint_to_add))
 			copy(new_tint[:], tint_to_add[:])
 			append(&draw_tint, new_tint) 
 			clear(&tint_to_add)
-			//delete(tint_to_add)
 		}
 		else if rl.IsKeyPressed(.SPACE) {
 			if len(draw_tint) != 0 {
-				delete(draw_tint[len(draw_tint) - 1])
+				delete(draw_tint[len(draw_tint) - 1]) //note: deallocate a dynamic array inside a dynamic array. 
 				pop(&draw_tint)
 			}
 		}
@@ -77,7 +75,7 @@ main :: proc() {
 		}
 		rl.EndDrawing()
 	}
-	
+	//note: clearing all the allocations when the apps is shutdown.
 	for &tint_arr in draw_tint {
 		delete(tint_arr)
 	}
@@ -87,7 +85,7 @@ main :: proc() {
 }
 
 setup :: proc() {
-	//rl.SetTraceLogLevel(.FATAL)
-	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Drawing Board")
-	// rl.SetTargetFPS(60)
+	//rl.settraceloglevel(.fatal)
+	rl.InitWindow(window_width, window_height, "drawing board")
+	// rl.settargetfps(60)
 }
