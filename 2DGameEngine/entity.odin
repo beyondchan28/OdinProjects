@@ -2,7 +2,7 @@ package game_engine
 
 import "core:fmt"
 
-generate_random_entity :: proc() {
+entity_generate_random :: proc() {
 	new_entity := entity_new("Entity", .Transform, .Rectangle)
 }
 
