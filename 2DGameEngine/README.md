@@ -2,13 +2,13 @@
 - Anything rather than a fundamental systems for 2D games such as Lua Bindings should be treated as plugin
 
 # Odin 2D Game Engine To-Do List:
-- [x] Components and Entities base 
-- [] Entity Manager
+- [x] Components and Entities base (Entity Manager) 
+- [x] Organize to seperate files
 - [] Scene system
 - [] Hot Reload
 - [] Basic GUI 
 - [] Integrate with Tiled for level design software
-- [] Organize to seperate files
+- [] Plugin Box2D (Phyics)
 
 ## Problem
 - Current implementation still hard coded on declaring components 
@@ -21,7 +21,7 @@
 - Need a function to check and find active and deactive entities
 - Adding a new entity, should be automatically choose the right index
 - Removing an entity should also deactivated all its components
-- Funtion to declaring components
+- Function to declaring components
 
 ### Odin Related To-Do List
 - [] Tryout the arena allocator and temp_allocator
