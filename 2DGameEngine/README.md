@@ -5,17 +5,19 @@
 - [x] Components and Entities base (Entity Manager) 
 - [x] Organize to seperate files
 - [] Scene system
-- [] Hot Reload
 - [] Basic GUI 
+- [] Hot Reload
 - [] Integrate with Tiled for level design software
 - [] Plugin Box2D (Phyics)
 
 ## Problem
-- Current implementation still hard coded on declaring components 
+- Unused components will be wasted and unused for the rest of the game
+- Need to find a way to using those unused components if running out of components
 
 ## Considerable
 - Start to use the GUI to know how the GUI integrates with the engine
 - Need to find a good way to set components
+- Flags to determine the type of entity, such as PERMANENT, REUSABLE, CAN_DELETE 
 
 ### Implementing Entity Manager
 - Need a function to check and find active and deactive entities

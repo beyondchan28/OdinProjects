@@ -1,60 +1,29 @@
-package game_engine
+package beyonddd_engine
 
 import "core:fmt"
+import "core:c"
 import rl "vendor:raylib"
 
-WINDOW_WIDTH :: 800
-WINDOW_HEIGHT :: 600
-
-ENTITIES_SIZE :: int(1000)
-entity_id :: distinct int
-entity :: struct {
-	id: entity_id,
-	active: bool,
-	name: string,
+WindowData :: struct {
+	height: c.int,
+	width: c.int,
+	fps: c.int,
+	states: rl.ConfigFlags,
+	title: cstring,
+	icon: rl.Image,
 }
 
-component_type :: enum u8 {
-	Transform,
-	Rectangle,
-}
-
-transfrom_component :: struct {
-	pos: rl.Vector2,
-	size: rl.Vector2,
-	scale: rl.Vector2,
-	active: bool,
-}
-
-rectangle_component :: struct {
-	rect: rl.Rectangle,
-	col: rl.Color,
-	active: bool,
-}
-
-//NOTE: this only use once. can be replaced with 'any' type.
-component_pointer_type :: union {
-	^transfrom_component,
-	^rectangle_component,
-} 
-
-entities : [ENTITIES_SIZE]entity
-
-transforms : [ENTITIES_SIZE]transfrom_component
-rectangles : [ENTITIES_SIZE]rectangle_component 
-// shape := [ENTITIES_SIZE]shape_component
-
-player : ^entity
+window_data: WindowData
 
 main :: proc() {
 	entities_setup()
 
-	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game Engine")
+	window_setup()
 	defer rl.CloseWindow()
-	for !rl.WindowShouldClose() {
-		rl.BeginDrawing()
-		rl.ClearBackground(rl.WHITE)
+	
 
+// Input ----------------------------------------------------------------	
+	for !rl.WindowShouldClose() {
 		if rl.IsMouseButtonPressed(.LEFT) {
 			// generate_random_entity()
 			component_activate(player.id, .Rectangle)
@@ -67,33 +36,37 @@ main :: proc() {
 			fmt.println(component_has(player.id, .Rectangle))
 		}
 
+// Rendering ------------------------------------------------------------		
+		rl.BeginDrawing()
 
-		game_loop()
+		rl.ClearBackground(rl.WHITE)
+
+		rendering()
 
 		rl.EndDrawing()
 	}
 }
 
-entities_setup :: proc() {
-	id : entity_id = 0
-	for &_entity in entities{
-		_entity.id = id 
-		id += 1
-	}
+window_setup :: proc() {
+	window_data.height = c.int(600)
+	window_data.width = c.int(800)
+	window_data.states = {.VSYNC_HINT}
+	window_data.title = "Beyonddd Engine"
+	window_data.fps = 60
 
-	player = entity_new("Player", .Transform, .Rectangle)
+	rl.InitWindow(window_data.width, window_data.height, window_data.title)
+	rl.SetTargetFPS(window_data.fps)
+	rl.SetWindowState(window_data.states)
 }
 
-
-game_loop :: proc() {
-	for _entity in entities {
+rendering :: proc() {
+	used_entities_id := scenes[scene_current_id].entities_id
+	for id in used_entities_id {
+		_entity := entities[id]
 		if _entity.active {
-			_transform := transforms[_entity.id]
-			// fmt.println(_entity.name)
-			// fmt.printfln("%.9f", _transform.pos)
-			_rectangle := rectangles[_entity.id]
-			if _rectangle.active {
-				rl.DrawRectangleRec(_rectangle.rect, _rectangle.col)
+			r_ptr := component_get(id, ^RectangleComponent)
+			if r_ptr.active {
+				rl.DrawRectangleRec(r_ptr.rect, r_ptr.col)
 			}
 		}
 	}
