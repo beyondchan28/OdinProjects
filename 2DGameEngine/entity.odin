@@ -46,6 +46,7 @@ entity_new :: proc(_name: string, _comp_type: ..ComponentType ) -> ^Entity {
 	return new_entity
 }
 
+
 entity_deactive :: proc(_id: EntityId) {
 	_entity := &entities[_id]
 	_entity.active = false
@@ -73,6 +74,3 @@ entity_deactivate_last :: proc() {
 		}
 	}
 }
-
-//TODO: entity_add_to_scene
-

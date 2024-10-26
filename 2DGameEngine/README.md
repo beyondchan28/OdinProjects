@@ -4,7 +4,8 @@
 # Odin 2D Game Engine To-Do List:
 - [x] Components and Entities base (Entity Manager) 
 - [x] Organize to seperate files
-- [] Scene system
+- [X] Action
+- [X] Scene system
 - [] Basic GUI 
 - [] Hot Reload
 - [] Integrate with Tiled for level design software

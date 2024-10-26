@@ -8,44 +8,13 @@ WindowData :: struct {
 	height: c.int,
 	width: c.int,
 	fps: c.int,
-	states: rl.ConfigFlags,
 	title: cstring,
+	states: rl.ConfigFlags,
 	icon: rl.Image,
+	background_color: rl.Color,
 }
 
 window_data: WindowData
-
-main :: proc() {
-	entities_setup()
-
-	window_setup()
-	defer rl.CloseWindow()
-	
-
-// Input ----------------------------------------------------------------	
-	for !rl.WindowShouldClose() {
-		if rl.IsMouseButtonPressed(.LEFT) {
-			// generate_random_entity()
-			component_activate(player.id, .Rectangle)
-			fmt.println(component_has(player.id, .Rectangle))
-		}
-
-		if rl.IsMouseButtonPressed(.RIGHT) {
-			// entity_deactivate_last()
-			component_deactivate(player.id, .Rectangle)
-			fmt.println(component_has(player.id, .Rectangle))
-		}
-
-// Rendering ------------------------------------------------------------		
-		rl.BeginDrawing()
-
-		rl.ClearBackground(rl.WHITE)
-
-		rendering()
-
-		rl.EndDrawing()
-	}
-}
 
 window_setup :: proc() {
 	window_data.height = c.int(600)
@@ -53,21 +22,32 @@ window_setup :: proc() {
 	window_data.states = {.VSYNC_HINT}
 	window_data.title = "Beyonddd Engine"
 	window_data.fps = 60
+	window_data.background_color = rl.WHITE
 
 	rl.InitWindow(window_data.width, window_data.height, window_data.title)
 	rl.SetTargetFPS(window_data.fps)
 	rl.SetWindowState(window_data.states)
 }
 
-rendering :: proc() {
-	used_entities_id := scenes[scene_current_id].entities_id
-	for id in used_entities_id {
-		_entity := entities[id]
-		if _entity.active {
-			r_ptr := component_get(id, ^RectangleComponent)
-			if r_ptr.active {
-				rl.DrawRectangleRec(r_ptr.rect, r_ptr.col)
-			}
-		}
+main :: proc() {
+// Startup setup ------------------------------------------------------------	
+	actions_setup()
+	scenes_setup()
+	entities_setup()
+	window_setup()
+	defer rl.CloseWindow()
+	
+	for !rl.WindowShouldClose() {
+		action_process() // user input
+
+// Rendering ------------------------------------------------------------		
+		rl.BeginDrawing()
+
+		rl.ClearBackground(window_data.background_color)
+
+		scene_render()
+
+		rl.EndDrawing()
 	}
 }
+
