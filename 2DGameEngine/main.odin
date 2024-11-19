@@ -26,15 +26,18 @@ window_setup :: proc() {
 
 	rl.InitWindow(window_data.width, window_data.height, window_data.title)
 	rl.SetTargetFPS(window_data.fps)
+	rl.SetTraceLogLevel(.ALL)
 	rl.SetWindowState(window_data.states)
 }
 
 main :: proc() {
 // Startup setup ------------------------------------------------------------	
-	actions_setup()
-	scenes_setup()
-	entities_setup()
 	window_setup()
+	scenes_setup()
+	asset_texture_setup_from_dir()
+	entities_setup()
+	actions_setup()
+	
 	defer rl.CloseWindow()
 	
 	for !rl.WindowShouldClose() {
@@ -45,6 +48,7 @@ main :: proc() {
 
 		rl.ClearBackground(window_data.background_color)
 
+		
 		scene_render()
 
 		rl.EndDrawing()

@@ -21,6 +21,8 @@ ActionGamepadAxis : map[Action]rl.GamepadAxis
 actions_setup :: proc() {
 	action_register(Action{"left_click", .START}, rl.KeyboardKey.LEFT)
 	action_register(Action{"right_click", .START}, rl.KeyboardKey.RIGHT)
+	action_register(Action{"change_scene", .START}, rl.KeyboardKey.SPACE)
+	action_register(Action{"change_scene_back", .START}, rl.KeyboardKey.TAB)
 }
 
 action_register_key :: proc(_name: Action, _key: rl.KeyboardKey) {
@@ -89,14 +91,23 @@ do_action_pressed :: proc(_action_name: string) {
 	if _action_name == "right_click" {
 		fmt.println("right pressed ")
 	}
+	if _action_name == "change_scene" {
+		fmt.println("change scene")
+		scene_change(1)
+	}
+	if _action_name == "change_scene_back" {
+		fmt.println("change scene back")
+		scene_change(0)
+	}
 }
 
 do_action_released :: proc(_action_name: string) {
 	if _action_name == "left_click" {
-		fmt.println("left pressed ")
+		fmt.println("left released ")
 	}
 	if _action_name == "right_click" {
-		fmt.println("right pressed ")
+		fmt.println("right released ")
 	}
+
 }
 // --------------------------------------------------------------------------------------------

@@ -22,7 +22,8 @@ entities_setup :: proc() {
 		id += 1
 	}
 
-	player = entity_new("Player", .Transform, .Rectangle)
+	player = entity_new("Player", .Transform, .Rectangle, .Sprite)
+	// sprite_set_texture_by_name(player.id, "gravital")
 	scene_add_entity(scene_current_id, player.id)
 }
 

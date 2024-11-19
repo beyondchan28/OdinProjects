@@ -48,6 +48,13 @@ scene_render :: proc() {
 			if r_ptr.active {
 				rl.DrawRectangleRec(r_ptr.rect, r_ptr.col)
 			}
+			s_ptr := component_get(id, ^SpriteComponent)
+			if s_ptr.active {
+				if s_ptr.texture_id != -1 {
+					_texture := textures[s_ptr.texture_id].texture
+					rl.DrawTextureEx(_texture, s_ptr.pos, s_ptr.rot, s_ptr.scale, s_ptr.tint)
+				}
+			}
 		}
 	}
 }
